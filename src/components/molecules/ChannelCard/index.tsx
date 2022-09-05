@@ -3,10 +3,7 @@ import Image from "next/image";
 import React from "react";
 
 const ChannelCard: React.FC<{ channel: Channel }> = ({ channel }) => (
-  <div
-    key={channel.id}
-    className="p-8 backdrop-brightness-50 flex flex-col items-center justify-center gap-4 rounded-lg cursor-pointer hover:scale-105 transition-all"
-  >
+  <div className="p-8 backdrop-brightness-50 flex flex-col items-center justify-center gap-4 rounded-lg cursor-pointer hover:scale-105 transition-all">
     <div className="rounded-lg overflow-hidden w-20 h-20">
       <Image
         className="flex-1"

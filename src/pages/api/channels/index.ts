@@ -11,10 +11,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     case "GET": {
-      const channelName = query.name;
-      if (!!channelName && typeof channelName === "string") {
-        const channel = await service.findByName(channelName);
-        res.status(200).json(channel);
+      const findBy = query.findBy;
+      if (!!findBy && typeof findBy === "string") {
+        const channels = await service.findBy(findBy);
+        res.status(200).json(channels);
         return;
       }
       const channels = await service.getAll();

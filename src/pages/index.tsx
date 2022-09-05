@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import CreateChannelButton from "../components/atoms/CreateChannelButton";
-import Channels from "../components/organisms/Channels";
+import Channels from "../components/templates/Channels";
 
 const Home: NextPage = () => {
   return (
@@ -12,11 +11,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center gap-8 min-h-screen p-4 bg-slate-800">
-        <h1 className="text-3xl text-white font-bold">Channels</h1>
-        <Channels />
-        <CreateChannelButton />
-      </main>
+      <Channels />
     </>
   );
 };
