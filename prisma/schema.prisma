@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Channel {
-    id       String    @id @default(cuid())
-    name     String
-    messages Message[]
+    id        String    @id @default(cuid())
+    name      String
+    messages  Message[]
+    createdAt DateTime  @default(now())
 }
 
 model Message {

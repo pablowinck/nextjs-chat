@@ -1,41 +1,9 @@
-import { Channel } from "@prisma/client";
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useFetchChannels } from "../hooks/useChannel";
-import { api } from "../utils/api";
+import CreateChannelButton from "../components/atoms/CreateChannelButton";
+import Channels from "../components/organisms/Channels";
 
-const Home: NextPage<{ initialChannels: Channel[] }> = ({
-  initialChannels,
-}) => {
-  const { isLoading, data } = useQuery("getName", () =>
-    axios
-      .get("https://api.namefake.com/english-united-states/male")
-      .then((res) => res.data)
-  );
-
-  const channels = useFetchChannels(initialChannels);
-
-  const client = useQueryClient();
-
-  const createChannel = useMutation(
-    () =>
-      api.post("/api/channels", {
-        name: data.name,
-      }),
-    {
-      onSuccess: () => {
-        client.invalidateQueries("getChannels");
-        client.invalidateQueries("getName");
-      },
-    }
-  );
-
-  const handleClick = () => {
-    createChannel.mutate();
-  };
+const Home: NextPage = () => {
   return (
     <>
       <Head>
@@ -44,52 +12,13 @@ const Home: NextPage<{ initialChannels: Channel[] }> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center gap-4 min-h-screen p-4 bg-violet-900">
-        <h1 className="text-3xl text-violet-100 font-bold">channels</h1>
-        <div className="flex gap-4">
-          {channels.data?.map((channel) => (
-            <div
-              key={channel.id}
-              className="p-8 bg-violet-500 flex flex-col items-center justify-center gap-4 rounded-lg cursor-pointer hover:scale-105 transition-all"
-            >
-              <div className="rounded-lg overflow-hidden w-20 h-20">
-                <Image
-                  className="flex-1"
-                  src={`https://avatars.dicebear.com/api/adventurer-neutral/${channel.name}.svg`}
-                  width="85px"
-                  height="85px"
-                  alt="avatar"
-                />
-              </div>
-              <span className="text-lg text-violet-200 ">{channel.name}</span>
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={handleClick}
-          className={`text-violet-100 font-bold border border-violet-100 rounded-lg p-4 mt-4 hover:backdrop-brightness-90 transition-all ${
-            (isLoading || createChannel.isLoading) &&
-            "cursor-not-allowed pointer-events-none backdrop-brightness-50"
-          }`}
-        >
-          {isLoading
-            ? "getting aleatory channel name"
-            : createChannel.isLoading
-            ? "creating channel"
-            : "create a new channel"}
-        </button>
+      <main className="container mx-auto flex flex-col items-center justify-center gap-8 min-h-screen p-4 bg-slate-800">
+        <h1 className="text-3xl text-white font-bold">Channels</h1>
+        <Channels />
+        <CreateChannelButton />
       </main>
     </>
   );
 };
 
 export default Home;
-
-export async function getServerSideProps() {
-  const channels = await api.get("/api/channels").then((res) => res.data);
-
-  return {
-    props: { initialChannels: channels },
-  };
-}
